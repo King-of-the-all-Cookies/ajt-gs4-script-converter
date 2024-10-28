@@ -1,16 +1,4 @@
-# Apollo Justice Trilogy (only GS4) script converter
-
-## How to use ##
-
-### Decode
-To decode the AJTGS4 script file (*.user.2.* file), you need to clone this repository to yourself and write the following in the console:
-
-```python main.py d <file>```
-
-### Encode
-To encode the AJTGS4 script file (*.user.2.*.txt file), you need to clone this repository to yourself and write the following in the console:
-
-```python main.py e <file>```
+# Apollo Justice Trilogy (only GS4) script converter (with GUI)
 
 # Special thanks
 Alex (https://gist.github.com/osyu)
