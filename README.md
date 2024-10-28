@@ -1,4 +1,4 @@
-# Apollo Justice Trilogy (only GS4) converter
+# Apollo Justice Trilogy (only GS4) script converter
 
 ## How to use ##
 
