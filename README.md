@@ -1,5 +1,7 @@
 # Apollo Justice Trilogy (only GS4) script converter
 
+# Don't forget, you must have python installed.
+
 ## How to use ##
 
 ### Decode
