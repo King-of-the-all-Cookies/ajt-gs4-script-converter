@@ -3,6 +3,7 @@
 # Don't forget, you must have python installed.
 At startup, the windows overlap each other. Drag and drop them as you like
 
+# To run, run main.py
 
 # Special thanks
 Alex (https://gist.github.com/osyu)
