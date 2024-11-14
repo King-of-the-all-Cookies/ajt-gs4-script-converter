@@ -29,6 +29,7 @@ def remove_tags_and_create_pdf(text, input_file_path):
                 pdf.ln()
 
         pdf_output_path = os.path.splitext(input_file_path)[0] + ".pdf"
+        pdf.output(pdf_output_path)
         show_popup("Success", f"PDF saved as {pdf_output_path}")
     except Exception as e:
         show_popup("Error", f"Failed to create PDF: {str(e)}")
@@ -75,7 +76,7 @@ def manual_file_conversion(sender, app_data):
 def select_file_tkinter():
     root = tk.Tk()
     root.withdraw()
-    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*"), ("AJT GS4 english script files", "*.user.2.en"), ("AJT GS4 japanese script files", "*.user.2.jp")])
     return file_path
 
 def select_file_callback(sender, app_data, user_data):
@@ -118,7 +119,7 @@ def run_script(sender, app_data, user_data):
         'color f',
         'cls',
         'echo Done!',
-        'pause',
+        'ping -n 3 localhost>nul',
         'cls'
     ])
 
@@ -148,7 +149,7 @@ dpg.create_context()
 dpg.create_viewport(title="GS4CONVERTER", width=1280, height=1024)
 
 with dpg.handler_registry():
-    with dpg.window(label="GS4CONVERTER", tag="main_window", width=800, height=600, pos=(300, 100)):
+    with dpg.window(label="user.2 to txt converter", tag="main_window", width=800, height=600, pos=(300, 100)):
         with dpg.child_window(label="Converter", width=800, height=600, border=False):
             dpg.add_text("Select Mode:")
             dpg.add_radio_button(("Decode", "Encode"), tag="mode", default_value="Decode")
