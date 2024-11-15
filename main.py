@@ -7,22 +7,32 @@ import re
 
 def remove_tags_and_create_pdf(text, input_file_path):
     try:
+
         text = text.replace(r'\linebreak|', '~linebreak~')
+        text = text.replace(r'\nextdialogue|', '~nextdialogue~')
+        
+
         cleaned_text = re.sub(r'\\[^|]+\|[^|]*\|', '', text)
-        dialogues = cleaned_text.split(r'~linebreak~')
-       
+        dialogues = cleaned_text.split(r'~nextdialogue~')
+
         pdf = FPDF()
         pdf.set_auto_page_break(auto=True, margin=15)
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-        
+
+
         pdf.cell(30, 10, txt="Page", border=1, align='C')
         pdf.cell(160, 10, txt="Dialogue", border=1, ln=True, align='L')
 
         page_number = 1
         for dialogue in dialogues:
+            # Убираем лишние пробелы
             dialogue = ' '.join(dialogue.split())
+
             if dialogue.strip():
+                # Обрабатываем перенос строк в реплике
+                dialogue = dialogue.replace(r'~linebreak~', '\n')
+
                 pdf.cell(30, 10, txt=str(page_number), border=1, align='C')
                 pdf.multi_cell(160, 10, txt=dialogue.strip(), border=1, align='L')
                 page_number += 1
@@ -33,6 +43,7 @@ def remove_tags_and_create_pdf(text, input_file_path):
         show_popup("Success", f"PDF saved as {pdf_output_path}")
     except Exception as e:
         show_popup("Error", f"Failed to create PDF: {str(e)}")
+
 
 def show_popup(title, message):
     with dpg.window(label=title, modal=True, no_title_bar=False) as popup_id:
