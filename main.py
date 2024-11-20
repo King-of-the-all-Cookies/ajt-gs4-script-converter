@@ -5,14 +5,47 @@ import os
 from fpdf import FPDF
 import re
 
+def read_file_to_array(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            lines = [line.strip() for line in lines]
+        return lines
+    except FileNotFoundError:
+        show_popup("ERROR", f"clean.txt not found")
+        return "ERROR"
+    '''
+    except Exception as e:
+        show_popup("ERROR", f"It's a ERROR :3")
+        return "ERROR"
+        '''
+
 def remove_tags_and_create_pdf(text, input_file_path):
     try:
-
+        display_curly_tags = dpg.get_value("display_curly_tags")
         text = text.replace(r'\linebreak|', '~linebreak~')
         text = text.replace(r'\nextdialogue|', '~nextdialogue~')
+        try:
+            tags = read_file_to_array("clean1.txt")
+        except:
+            show_popup("ERROR", f"clean1.txt not found")
+        try:
+            excepts = read_file_to_array("clean.txt")
+        except:
+            show_popup("ERROR", f"clean.txt not found. Run GEN_Clean to create this file")
         
+        for i in tags:
+            text = text.replace(i, '')
+        for i in excepts:
+            text = text.replace(i, '')
+            
+        
+        cleaned_text = text
+        #cleaned_text = re.sub(r'\\[^|]+\|[^|]*\|', '', text)
+        
+        if not display_curly_tags:
+            cleaned_text = re.sub(r'\\{[^}]*\\}', '', cleaned_text)
 
-        cleaned_text = re.sub(r'\\[^|]+\|[^|]*\|', '', text)
         dialogues = cleaned_text.split(r'~nextdialogue~')
 
         pdf = FPDF()
@@ -26,11 +59,11 @@ def remove_tags_and_create_pdf(text, input_file_path):
 
         page_number = 1
         for dialogue in dialogues:
-            # Убираем лишние пробелы
+
             dialogue = ' '.join(dialogue.split())
 
             if dialogue.strip():
-                # Обрабатываем перенос строк в реплике
+
                 dialogue = dialogue.replace(r'~linebreak~', '\n')
 
                 pdf.cell(30, 10, txt=str(page_number), border=1, align='C')
@@ -73,6 +106,8 @@ def show_txt_to_pdf_window():
         dpg.add_text("Source TXT File:")
         dpg.add_input_text(label="File Path", tag="manual_file_path", width=350)
         dpg.add_button(label="Browse...", callback=update_file_path)
+        dpg.add_text("Options:")
+        dpg.add_checkbox(label="ON/OFF display of {} tags", tag="display_curly_tags", default_value=True)
         dpg.add_button(label="Convert", callback=manual_file_conversion)
 
 def manual_file_conversion(sender, app_data):
